@@ -15,7 +15,8 @@ app.use(express.urlencoded());
 app.use('/', require('./routes/group'));
 app.use('/ledger', require('./routes/ledger'));
 
-const server = app.listen(1000, (err) => {
+const port = process.env.PORT || 1000;
+const server = app.listen(port, (err) => {
     if(err){
         //console.log('Server Crash'+ JSON.stringify(err));
         logger.error('Server Crash'+ JSON.stringify(err));
