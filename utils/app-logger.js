@@ -11,7 +11,7 @@ const customFormat = printf(({level, message,label, timestamp})=>{
 
 module.exports = function(moduleName){
     return logger = winston.createLogger({
-        level:'debug',
+        level:'error',
         format: combine(
             label({ label: moduleName }),
             timestamp(),
