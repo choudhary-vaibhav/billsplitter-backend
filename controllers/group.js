@@ -63,6 +63,8 @@ module.exports = {
 
     login(request, response){
         const groupObject = request.body;
+        logger.debug(groupObject);
+        //console.log(groupObject);
         repo.login(groupObject, response);
     }
 }

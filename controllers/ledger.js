@@ -9,7 +9,7 @@ module.exports = {
         ledgerObject['group'] = name;
         //console.log('name ', name);
 
-        //console.log('ledger object is ', ledgerObject);
+        console.log('ledger object is ', ledgerObject);
         logger.debug('ledger object is ', ledgerObject);
 
 

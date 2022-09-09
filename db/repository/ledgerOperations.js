@@ -15,14 +15,18 @@ module.exports = {
                 GroupModel.findOneAndUpdate({name:name}, {$push:{transactions:doc._id}}, (err, doc) => {
                     if(err){
                         response.json({message:'Some DB Error 2 '});
+                        console.log('Some DB Error 2 ');
                     }else if(doc){
                         response.json({message:'Transaction successfully added '});
+                        console.log('Transaction successfully added ');
                     }else{
                         response.json({message:'Problem in transaction addition'});
+                        console.log('Problem in transaction addition2');
                     }
                 })
             }else{
                 response.json({message:'Problem in transaction addition'});
+                console.log('Problem in transaction addition1');
             }
         })
     },
