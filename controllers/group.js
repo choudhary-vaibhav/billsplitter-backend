@@ -61,10 +61,30 @@ module.exports = {
         repo.find(group_name, response);
     },
 
-    login(request, response){
+    // login(request, response){
+    //     const groupObject = request.body;
+    //     logger.debug(groupObject);
+    //     console.log(groupObject);
+    //     repo.login(groupObject, response);
+    // },
+
+    async login(request, response){
         const groupObject = request.body;
-        logger.debug(groupObject);
-        //console.log(groupObject);
-        repo.login(groupObject, response);
+        const result =  await repo.login(groupObject);
+        try{
+        if(result && result.name){
+            const group_name = groupObject.name;
+            //console.log(group_name);
+            response.status(200).json({message:'Logged in ',group_name});
+        }
+        else{
+            response.status(404).json({message:'Invalid Group Name or Password'});
+        }
     }
+    catch(err){
+        response.status(500).json({message:language['server.error']});
+        //console.log('Login ',err);
+    }
+
+    },
 }

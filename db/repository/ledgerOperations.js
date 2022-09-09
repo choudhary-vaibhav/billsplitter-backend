@@ -9,24 +9,24 @@ module.exports = {
 
         LedgerModel.create(ledgerObject,(err,doc)=>{
             if(err){
-                response.json({message:'Some DB Error 1 '});
+                response.status(500).json({message:'Some DB Error 1 '});
             }else if(doc){
 
                 GroupModel.findOneAndUpdate({name:name}, {$push:{transactions:doc._id}}, (err, doc) => {
                     if(err){
-                        response.json({message:'Some DB Error 2 '});
-                        console.log('Some DB Error 2 ');
+                        response.status(500).json({message:'Some DB Error 2 '});
+                        //console.log('Some DB Error 2 ');
                     }else if(doc){
-                        response.json({message:'Transaction successfully added '});
-                        console.log('Transaction successfully added ');
+                        response.status(200).json({message:'Transaction successfully added '});
+                        //console.log('Transaction successfully added ');
                     }else{
-                        response.json({message:'Problem in transaction addition'});
-                        console.log('Problem in transaction addition2');
+                        response.status(404).json({message:'Error in group name'});
+                        //console.log('Error in group name');
                     }
                 })
             }else{
-                response.json({message:'Problem in transaction addition'});
-                console.log('Problem in transaction addition1');
+                response.status(500).json({message:'Problem in transaction addition'});
+                //console.log('Problem in transaction addition1');
             }
         })
     },
@@ -34,22 +34,22 @@ module.exports = {
     remove(ledgerObject, name, response){
         LedgerModel.findOneAndDelete({_id:ledgerObject._id},(err, doc)=>{
             if(err){
-                response.json({message:'Some DB Error  '});
+                response.status(500).json({message:'Some DB Error  '});
             }
             else if(doc){
                 GroupModel.findOneAndUpdate({name:name}, {$pull:{transactions:doc._id}}, (err, doc) => {
                     if(err){
-                        response.json({message:'Some DB Error 2 '});
+                        response.status(500).json({message:'Some DB Error 2 '});
                     }else if(doc){
-                        response.json({message:'Transaction data removed'});
+                        response.status(200).json({message:'Transaction data removed'});
                     }else{
-                        response.json({message:'Error in Group Name '});
+                        response.status(404).json({message:'Error in Group Name '});
                     }
                 })
                 
             }
             else{
-                response.json({message:'Invalid Ledger Data '});
+                response.status(500).json({message:'Invalid Ledger Data '});
             }
         })
     },
@@ -57,13 +57,13 @@ module.exports = {
     find(groupName, response){
         GroupModel.findOne({name:groupName}).populate('transactions').exec((err, group) => {
             if(err){
-                response.json({message:'Some DB Error  '});
+                response.status(500).json({message:'Some DB Error  '});
             }else if(group){
                 const transactions = group['transactions'];
-                response.json({message:'Group Object: ', transactions});
+                response.status(200).json({message:'Group Object: ', transactions});
                 //console.log(group.transactions);
             }else{
-                response.json({message:'Invalid Group name or Password'});
+                response.status(404).json({message:'Invalid Group name or Password'});
             }
         })
     }

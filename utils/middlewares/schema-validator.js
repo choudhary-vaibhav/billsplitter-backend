@@ -12,7 +12,7 @@ module.exports = (validator) => {
       
       
       if (error) {
-        return response.status(400).send(error.details[0].message)
+        return response.status(403).send(error.details[0].message)
       }
       next(); // Move to the Controller
     }

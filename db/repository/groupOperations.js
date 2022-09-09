@@ -8,11 +8,11 @@ module.exports = {
 
         GroupModel.create(groupObject, (err, doc) => {
             if(err){
-                response.json({message:'Some DB Error  '});
+                response.status(500).json({message:'Some DB Error  '});
             }else if(doc){
-                response.json({message:'SignIn'});
+                response.status(200).json({message:'SignIn'});
             }else{
-                response.json({message:'Error in group creation'});
+                response.status(403).json({message:'Error in group creation'});
             }
         })
     },
@@ -20,14 +20,14 @@ module.exports = {
     find(groupName, response){
         GroupModel.findOne({name:groupName},(err, doc)=>{
             if(err){
-                response.json({message:'Some DB Error  '});
+                response.status(500).json({message:'Some DB Error  '});
             }
             else if(doc){
                 const members = doc.members;
-                response.json({message:'DataObject: ', members});
+                response.status(200).json({message:'DataObject: ', members});
             }
             else{
-                response.json({message:'Invalid Group name or Password'});
+                response.status(404).json({message:'Invalid Group name or Password'});
             }
         })
 
@@ -47,12 +47,12 @@ module.exports = {
     update(memberObject, name, response){
         GroupModel.findOneAndUpdate({name:name}, {$push:{members:memberObject.new_member}}, (err, doc)=>{
             if(err){
-                response.json({message:'Some DB Error  '});
+                response.status(500).json({message:'Some DB Error  '});
             }
             else if(doc){
-                response.json({message:'Updated successfully '});
+                response.status(200).json({message:'Updated successfully '});
             }else{
-                response.json({message:'Invalid Group name or Password'});
+                response.status(404).json({message:'Invalid Group name or Password'});
             }
         });
     },
@@ -60,30 +60,30 @@ module.exports = {
     remove(groupObject, response){
         GroupModel.findOneAndDelete({name:groupObject.name, password:groupObject.password},(err, doc)=>{
             if(err){
-                response.json({message:'Some DB Error  '});
+                response.status(500).json({message:'Some DB Error  '});
             }
             else if(doc){
-                response.json({message:groupObject.name + ' deleted'});
+                response.status(200).json({message:groupObject.name + ' deleted'});
             }
             else{
-                response.json({message:'Invalid Group Name or Password'});
+                response.status(404).json({message:'Invalid Group Name or Password'});
             }
         })
     },
 
-    login(groupObject, response){
-        GroupModel.findOne(({name:groupObject.name, password:groupObject.password},(err, doc)=>{
-            if(err){
-                response.json({message:'Some DB Error  '});
-            }
-            else if(doc){
-                const group_name = groupObject.name;
-                //console.log(group_name);
-                response.json({message:'Logged in ',group_name});
-            }
-            else{
-                response.json({message:'Invalid Group Name or Password'});
-            }
-        }))
+    async login(groupObject){
+        // GroupModel.findOne(({name:groupObject.name, password:groupObject.password},(err)=>{
+        //     if(err){
+        //         response.status(404).json({message:'Invalid Group Name or Password'});
+        //     }
+        //     else{
+        //         const group_name = groupObject.name;
+        //         //console.log(group_name);
+        //         response.status(200).json({message:'Logged in ',group_name});
+        //     }
+        // }))
+
+        const doc = await GroupModel.findOne({name:groupObject.name, password:groupObject.password}).exec();
+        return doc;
     }
 }
